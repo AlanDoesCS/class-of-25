@@ -5,7 +5,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 let playerChar: Sprite = null
 let gravity = 9.81 * 7
-scene.setBackgroundColor(13)
+scene.setBackgroundColor(2)
 playerChar = sprites.create(assets.image`player`, SpriteKind.Player)
 controller.moveSprite(playerChar, 100, 0)
 tiles.setCurrentTilemap(tilemap`Classroom Chaos`)
