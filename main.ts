@@ -1,6 +1,6 @@
 mp.onButtonEvent(mp.MultiplayerButton.A, ControllerButtonEvent.Pressed, function (player2) {
     if (mp.getPlayerSprite(player2).vy == 0) {
-        mp.getPlayerSprite(player2).vy = -60
+        mp.getPlayerSprite(player2).vy = GRAVITY * -1.2
     }
 })
 function initPlayer (playerNumber: number, playerSprite: Sprite) {
@@ -17,7 +17,6 @@ function initPlayer (playerNumber: number, playerSprite: Sprite) {
     playerSprite.ay = GRAVITY
 }
 let GRAVITY = 0
-let gameStarted = false
 let middleOfPlayers = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -37,7 +36,7 @@ let middleOfPlayers = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
 scene.cameraFollowSprite(middleOfPlayers)
-GRAVITY = 9.81 * 7
+GRAVITY = 9.81 * 10
 let Alan = sprites.create(assets.image`Alan`, SpriteKind.Player)
 let Israel = sprites.create(assets.image`myImage`, SpriteKind.Player)
 let PlayableCharacters = [Alan, Israel]
@@ -50,7 +49,7 @@ scene.setBackgroundColor(0)
 tiles.setCurrentTilemap(tilemap`Classroom Chaos`)
 initPlayer(1, Alan)
 initPlayer(2, Israel)
-gameStarted = true
+let gameStarted = true
 game.setGameOverMessage(false, "[1]" + " lost!")
 game.setGameOverEffect(false, effects.dissolve)
 forever(function () {
