@@ -21,6 +21,9 @@ function setMat2D (i: number, j: number, value: number, matrix: number[][]) {
     matrix[i] = list
     return matrix
 }
+function getMatImage2D (i: number, j: number, mat: Image[][]) {
+    return mat[i][j]
+}
 function openCredits () {
     MMBTNPressed = false
     scene.setBackgroundImage(assets.image`CreditsBG`)
@@ -137,14 +140,19 @@ function openCharacterSelect () {
     // Player 1
     // Player 2
     MMSelectedCharacterCoordinates = [[0, 0], [0, 0]]
-    PlayableCharacters = [[sprites.create(assets.image`Federico`, SpriteKind.Player), sprites.create(assets.image`Israel`, SpriteKind.Player), sprites.create(assets.image`Yichi`, SpriteKind.Player)], [sprites.create(assets.image`Alan`, SpriteKind.Player), sprites.create(assets.image`Mr Shrimpton`, SpriteKind.Player), sprites.create(assets.image`Zak`, SpriteKind.Player)], [sprites.create(assets.image`Hugo`, SpriteKind.Player), sprites.create(assets.image`Hyojun`, SpriteKind.Player), sprites.create(assets.image`Albert`, SpriteKind.Player)]]
+    PlayableCharacters = [[assets.image`Federico`, assets.image`Israel`, assets.image`Yichi`], [assets.image`Alan`, assets.image`Mr Shrimpton`, assets.image`Zak`], [assets.image`Hugo`, assets.image`Hyojun`, assets.image`Albert`]]
+    for (let SpriteList1D of PlayableCharacters) {
+        for (let sprite of SpriteList1D) {
+        	
+        }
+    }
     MMType = "characterSelect"
     pauseUntil(() => MMBTNPressed && MMBTNPressedP2)
     scene.cameraShake(4, 500)
     scene.setBackgroundImage(assets.image`EmptyMenuBG`)
     gameStarted = false
     sprites.destroyAllSpritesOfKind(SpriteKind.Cursor)
-    initFightLevel(getMatSprite2D(getMat2D(0, 1, MMSelectedCharacterCoordinates), getMat2D(0, 0, MMSelectedCharacterCoordinates), PlayableCharacters), getMatSprite2D(getMat2D(1, 1, MMSelectedCharacterCoordinates), getMat2D(1, 0, MMSelectedCharacterCoordinates), PlayableCharacters))
+    initFightLevel(sprites.create(getMatImage2D(getMat2D(0, 1, MMSelectedCharacterCoordinates), getMat2D(0, 0, MMSelectedCharacterCoordinates), PlayableCharacters), SpriteKind.Player), sprites.create(getMatImage2D(getMat2D(1, 1, MMSelectedCharacterCoordinates), getMat2D(1, 0, MMSelectedCharacterCoordinates), PlayableCharacters), SpriteKind.Player))
 }
 function getPlayerY (playerNum4: number) {
     return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum4)).y
@@ -215,9 +223,6 @@ function isMMSelected (playerNumber: number) {
         return MMBTNPressedP2
     }
 }
-function getMatSprite2D (i: number, j: number, mat: Sprite[][]) {
-    return mat[i][j]
-}
 mp.onButtonEvent(mp.MultiplayerButton.Up, ControllerButtonEvent.Pressed, function (player2) {
     if (gameStarted) {
     	
@@ -257,7 +262,7 @@ function startCountdown () {
 }
 let MiddleNotice: Sprite = null
 let MMSelectedButton = ""
-let PlayableCharacters: Sprite[][] = []
+let PlayableCharacters: Image[][] = []
 let middleOfPlayers: Sprite = null
 let GRAVITY = 0
 let player2Jumps = 0
