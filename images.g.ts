@@ -817,25 +817,6 @@ c . . . . c . . . . c . . . . c
 . . . . c c . . . . c c . . . . 
 . . . . . . c c c c . . . . . . 
 `;
-            case "5e6x/J^U_e+51{AxnpN)":
-            case "Mr Shrimpton":return img`
-. . . . . . 8 8 8 8 . . . . . . 
-. . . . 8 8 . . . . 8 8 . . . . 
-. . . 8 . . . . . . . . 8 . . . 
-. . 8 . . . . . . . . . . 8 . . 
-. 8 . . . . . . . . . . . . 8 . 
-. 8 . 8 8 8 8 . . . 8 8 . . 8 . 
-8 . . . . . 8 . . 8 . . 8 . . 8 
-8 . . . . . 8 . . 8 . . . . . 8 
-8 . . . . . 8 . . . 8 8 . . . 8 
-8 . . . . . 8 . . . . . 8 . . 8 
-. 8 . 8 . . 8 . . 8 . . 8 . 8 . 
-. 8 . . 8 8 . . . . 8 8 . . 8 . 
-. . 8 . . . . . . . . . . 8 . . 
-. . . 8 . . . . . . . . 8 . . . 
-. . . . 8 8 . . . . 8 8 . . . . 
-. . . . . . 8 8 8 8 . . . . . . 
-`;
             case "image1":
             case "Israel":return img`
 . . . . . . 9 9 9 9 . . . . . . 
@@ -854,6 +835,120 @@ c . . . . c . . . . c . . . . c
 . . . 9 . . . . . . . . 9 . . . 
 . . . . 9 9 . . . . 9 9 . . . . 
 . . . . . . 9 9 9 9 . . . . . . 
+`;
+            case "image9":
+            case "Cursor":return img`
+. c c c c c c c c c c c c c c . 
+c c c c c c c c c c c c c c c c 
+c c b b b b b b b b b b b b c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c . . . . . . . . . . . . c c 
+c c c c c c c c c c c c c c c c 
+b c c c c c c c c c c c c c c b 
+. b b b b b b b b b b b b b b . 
+`;
+            case "image10":
+            case "tickSprite":return img`
+. . . . . . d d d d . . . . . . 
+. . . . d d d d d d d d . . . . 
+. . . d d d d d d d d d d . . . 
+. . d d d d d d d d d d d d . . 
+. d d d d d d d d d 1 1 1 3 d . 
+. d d d d d d d d 1 1 3 3 d d . 
+d d 1 1 1 d d d 1 1 3 d d d d d 
+d d d 3 1 1 d 1 1 3 d d d d d d 
+d d d d 3 1 1 1 1 d d d d d d d 
+6 d d d d 3 1 1 3 d d d d d d 6 
+. d d d d d 3 3 d d d d d d d . 
+. 6 d d d d d d d d d d d d 6 . 
+. . 6 d d d d d d d d d d 6 . . 
+. . . 6 d d d d d d d d 6 . . . 
+. . . . 6 6 d d d d 6 6 . . . . 
+. . . . . . 6 6 6 6 . . . . . . 
+`;
+            case "image14":
+            case "ThreeSprite":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . f f f f f f f f f f f . . 
+. . . f f f f f f f f f f f . . 
+. . . f f f f f f f f f f f . . 
+. . . 8 8 8 8 8 8 f f f f f . . 
+. . . . . . . . . f f f f f . . 
+. . . . . . f f f f f f f 8 . . 
+. . . . . . f f f f f f f . . . 
+. . . . . . 8 8 8 f f f f f . . 
+. f f f f . . . . f f f f f . . 
+. f f f f f f f f f f f f f . . 
+. f f f f f f f f f f f f f . . 
+. 8 8 f f f f f f f f f 8 8 . . 
+. . . 8 8 8 8 8 8 8 8 8 . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image12":
+            case "TwoSprite":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . f f f f f f f f f f f . . 
+. . f f f f f f f f f f f f . . 
+. . f f f f f f f f f f f f . . 
+. . 8 8 8 8 8 8 8 f f f f f . . 
+. . . . . . . . . f f f f f . . 
+. . . . . . . f f f f f f f . . 
+. . . . . f f f f f f f 8 8 . . 
+. . . f f f f f f f 8 8 . . . . 
+. . f f f f f f 8 8 . . . . . . 
+. . f f f f f f f f f f f f . . 
+. . f f f f f f f f f f f f . . 
+. . f f f f f f f f f f f f . . 
+. . 8 8 8 8 8 8 8 8 8 8 8 8 . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image13":
+            case "OneSprite":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . . . . f f f f . . . . . . 
+. . . . . f f f f f . . . . . . 
+. . . . f f f f f f . . . . . . 
+. . . f f f 8 f f f . . . . . . 
+. . . f f 8 . f f f . . . . . . 
+. . . 8 8 . . f f f . . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . . . . . f f f . . . . . . 
+. . . f f f f f f f f f f . . . 
+. . . f f f f f f f f f f . . . 
+. . . 8 8 8 8 8 8 8 8 8 8 . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image11":
+            case "GoSprite":return img`
+. . . . . . . . . . . . . . . . 
+. . c c c b b . . . c c c b b . 
+. c c b b b b b . c c b b b b b 
+. b b b a b b b . b b b a b b c 
+. b b a . a b b . b b a . a c c 
+. b b . . . a a . b b . . . c b 
+. b b . . . . . . b b . . . b b 
+. b b . b b c b . b c . . . b b 
+. b b . b c b b . c c . . . b b 
+. b b . a a b b . c b . . . b b 
+. b b . . . b b . b b . . . b b 
+. b c b . b b b . b b . . . b b 
+. c b b b b c c . b b b . b b c 
+. a b b c c c a . a b b b c c a 
+. . a a a a a . . . a a a a a . 
+. . . . . . . . . . . . . . . . 
 `;
             case "image2":
             case "Federico":return img`
@@ -893,24 +988,119 @@ d . . . . . . d d . . . . . . d
 . . . . d d . . . . d d . . . . 
 . . . . . . d d d d . . . . . . 
 `;
-            case "image9":
-            case "Cursor":return img`
-. c c c c c c c c c c c c c c . 
-c c c c c c c c c c c c c c c c 
-c c b b b b b b b b b b b b c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c . . . . . . . . . . . . c c 
-c c c c c c c c c c c c c c c c 
-b c c c c c c c c c c c c c c b 
-. b b b b b b b b b b b b b b . 
+            case "5e6x/J^U_e+51{AxnpN)":
+            case "Mr Shrimpton":return img`
+. . . . . . 8 8 8 8 . . . . . . 
+. . . . 8 8 . . . . 8 8 . . . . 
+. . . 8 . . . . . . . . 8 . . . 
+. . 8 . . . . . . . . . . 8 . . 
+. 8 . . . . . . . . . . . . 8 . 
+. 8 . 8 8 8 8 . . . 8 8 . . 8 . 
+8 . . . . . 8 . . 8 . . 8 . . 8 
+8 . . . . . 8 . . 8 . . . . . 8 
+8 . . . . . 8 . . . 8 8 . . . 8 
+8 . . . . . 8 . . . . . 8 . . 8 
+. 8 . 8 . . 8 . . 8 . . 8 . 8 . 
+. 8 . . 8 8 . . . . 8 8 . . 8 . 
+. . 8 . . . . . . . . . . 8 . . 
+. . . 8 . . . . . . . . 8 . . . 
+. . . . 8 8 . . . . 8 8 . . . . 
+. . . . . . 8 8 8 8 . . . . . . 
+`;
+            case "image15":
+            case "Zak":return img`
+. . . . . . b b b b . . . . . . 
+. . . . b b . . . . b b . . . . 
+. . . b . . . . . . . . b . . . 
+. . b . . . . . . . . . . b . . 
+. b . . b b b b b b b b b . b . 
+. b . . . . . . . . . b . . b . 
+b . . . . . . . . b b . . . . b 
+b . . . . . . . b b . . . . . b 
+b . . . . . . b b . . . . . . b 
+b . . . . . b b . . . . . . . b 
+. b . . . b b . . . . . . . b . 
+. b . . b b b b b b b b b . b . 
+. . b . . . . . . . . . . b . . 
+. . . b . . . . . . . . b . . . 
+. . . . b b . . . . b b . . . . 
+. . . . . . b b b b . . . . . . 
+`;
+            case "]%@]c^pSz%4}_x|T{25)":
+            case "awdawda":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "`(f:b6~_LdP":
+            case "Hugo":return img`
+. . . . . . e e e e . . . . . . 
+. . . . e e . . . . e e . . . . 
+. . . e . . . . . . . . e . . . 
+. . e . . e e . . e e . . e . . 
+. e . . . e e . . e e . . . e . 
+. e . . . e e . . e e . . . e . 
+e . . . . e e e e e e . . . . e 
+e . . . . e e e e e e . . . . e 
+e . . . . e e . . e e . . . . e 
+e . . . . e e . . e e . . . . e 
+. e . . . e e . . e e . . . e . 
+. e . . . e e . . e e . . . e . 
+. . e . . e e . . e e . . e . . 
+. . . e . . . . . . . . e . . . 
+. . . . e e . . . . e e . . . . 
+. . . . . . e e e e . . . . . . 
+`;
+            case "t7s=|ayhoc`dn*fh8Cbe":
+            case "Hyojun":return img`
+. . . . . . a a a a . . . . . . 
+. . . . a a . . . . a a . . . . 
+. . . a . . . . . . . . a . . . 
+. . a . . . . . . . . . . a . . 
+. a . a . . a . . . a a . . a . 
+. a . a . . a . . a . . a . a . 
+a . . a . . a . . a . . . . . a 
+a . . a a a a . . a . . . . . a 
+a . . a . . a . . a . . . . . a 
+a . . a . . a . . a . . . . . a 
+. a . a . . a . . a . . a . a . 
+. a . a . . a . . . a a . . a . 
+. . a . . . . . . . . . . a . . 
+. . . a . . . . . . . . a . . . 
+. . . . a a . . . . a a . . . . 
+. . . . . . a a a a . . . . . . 
+`;
+            case ";mjlAM:+c`5W;NOC,[6}":
+            case "Albert":return img`
+. . . . . . 7 7 7 7 . . . . . . 
+. . . . 7 7 . . . . 7 7 . . . . 
+. . . 7 . . . . . . . . 7 . . . 
+. . 7 . 7 7 . . 7 . . . 7 7 . . 
+. 7 . 7 7 7 7 . 7 7 . 7 7 . 7 . 
+. 7 . 7 . . 7 . 7 . 7 . 7 . 7 . 
+7 . . 7 . . 7 . 7 . . . 7 . . 7 
+7 . . 7 7 7 7 . 7 . . . 7 . . 7 
+7 . . 7 . . 7 . 7 . . . 7 . . 7 
+7 . . 7 . . 7 . 7 . . . 7 . . 7 
+. 7 . 7 . . 7 . 7 . . . 7 . 7 . 
+. 7 . 7 . . 7 . 7 . . . 7 . 7 . 
+. . 7 . . . . . . . . . . 7 . . 
+. . . 7 . . . . . . . . 7 . . . 
+. . . . 7 7 . . . . 7 7 . . . . 
+. . . . . . 7 7 7 7 . . . . . . 
 `;
         }
         return null;
