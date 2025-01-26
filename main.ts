@@ -223,6 +223,11 @@ function isMMSelected (playerNumber: number) {
         return MMBTNPressedP2
     }
 }
+function doDamageToPlayer (playerNum: number, amount: number, xDirection: number, yDirection: number) {
+    mp.changePlayerStateBy(mp.getPlayerByNumber(playerNum), MultiplayerState.score, amount)
+    mp.getPlayerSprite(mp.getPlayerByNumber(playerNum)).vx += mp.getPlayerState(mp.getPlayerByNumber(playerNum), MultiplayerState.score) * (xDirection * 2)
+    mp.getPlayerSprite(mp.getPlayerByNumber(playerNum)).vy += mp.getPlayerState(mp.getPlayerByNumber(playerNum), MultiplayerState.score) * (yDirection * 7)
+}
 mp.onButtonEvent(mp.MultiplayerButton.Up, ControllerButtonEvent.Pressed, function (player2) {
     if (gameStarted) {
     	
@@ -279,5 +284,8 @@ openMenu()
 forever(function () {
     if (gameStarted) {
         updateMiddleOfPlayers()
+        for (let index = 0; index <= 1; index++) {
+            mp.getPlayerSprite(mp.getPlayerByNumber(index + 1)).ax = mp.getPlayerSprite(mp.getPlayerByNumber(index + 1)).vx * -0.1
+        }
     }
 })
