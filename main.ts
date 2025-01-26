@@ -1,5 +1,11 @@
+namespace SpriteKind {
+    export const Cursor = SpriteKind.create()
+}
 namespace MultiplayerState {
     export const numJumps = MultiplayerState.create()
+}
+function clamp (min: number, value: number, max: number) {
+    return Math.min(max, Math.max(value, min))
 }
 function openCredits () {
     MMBTNPressed = false
@@ -7,6 +13,21 @@ function openCredits () {
     pauseUntil(() => MMBTNPressed)
     openMenu()
 }
+mp.onButtonEvent(mp.MultiplayerButton.Right, ControllerButtonEvent.Pressed, function (player2) {
+    if (gameStarted) {
+    	
+    } else {
+        if (MMType == "characterSelect") {
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 0, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 0, MMSelectedCharacterCoordinates) + 1, 2), MMSelectedCharacterCoordinates)
+            if (player2 == mp.playerSelector(mp.PlayerNumber.One)) {
+                tiles.placeOnTile(cursorP1, tiles.getTileLocation(1 + getMat4x4(0, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(0, 1, MMSelectedCharacterCoordinates)))
+            } else {
+                tiles.placeOnTile(cursorP2, tiles.getTileLocation(5 + getMat4x4(1, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(1, 1, MMSelectedCharacterCoordinates)))
+            }
+        }
+    }
+})
 mp.onButtonEvent(mp.MultiplayerButton.A, ControllerButtonEvent.Pressed, function (player2) {
     if (gameStarted) {
         if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1 && 0 < player1Jumps) {
@@ -16,8 +37,10 @@ mp.onButtonEvent(mp.MultiplayerButton.A, ControllerButtonEvent.Pressed, function
             mp.getPlayerSprite(player2).vy = GRAVITY * -0.5
             player2Jumps += -1
         }
-    } else {
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
         MMBTNPressed = true
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 2) {
+        MMBTNPressedP2 = true
     }
 })
 function initFightLevel (player1Sprite: Sprite, player2Sprite: Sprite) {
@@ -58,64 +81,129 @@ function getPlayerVX (playerNum2: number) {
 function getPlayerVY (playerNum3: number) {
     return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum3)).vy
 }
+function setMat4x4 (i: number, j: number, value: number, matrix: number[][]) {
+    list = matrix[i]
+    list[j] = value
+    matrix[i] = list
+    return matrix
+}
+function openCharacterSelect () {
+    scene.setBackgroundImage(assets.image`CharacterSelectMenuBG`)
+    tiles.setCurrentTilemap(tilemap`SelectedPlayers`)
+    cursorP1 = sprites.create(assets.image`Cursor`, SpriteKind.Cursor)
+    cursorP2 = sprites.create(assets.image`Cursor`, SpriteKind.Cursor)
+    tiles.placeOnTile(cursorP1, tiles.getTileLocation(1, 4))
+    tiles.placeOnTile(cursorP2, tiles.getTileLocation(5, 4))
+    MMBTNPressed = false
+    MMBTNPressedP2 = false
+    // Player 1
+    // Player 2
+    MMSelectedCharacterCoordinates = [[0, 0], [0, 0]]
+    MMType = "characterSelect"
+    pauseUntil(() => MMBTNPressed && MMBTNPressedP2)
+    scene.cameraShake(4, 500)
+    scene.setBackgroundImage(assets.image`EmptyMenuBG`)
+    gameStarted = false
+    Alan = sprites.create(assets.image`Alan`, SpriteKind.Player)
+    Israel = sprites.create(assets.image`Israel`, SpriteKind.Player)
+    PlayableCharacters = [Alan, Israel]
+    initFightLevel(Alan, Israel)
+}
 function getPlayerY (playerNum4: number) {
     return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum4)).y
 }
 mp.onButtonEvent(mp.MultiplayerButton.Down, ControllerButtonEvent.Pressed, function (player2) {
     if (gameStarted) {
     	
-    } else {
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
         music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        if (MMSelectedButton == "start") {
-            MMSelectedButton = "credits"
-            scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
-        } else {
-            MMSelectedButton = "start"
-            scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+        if (MMType == "mainMenu") {
+            if (MMSelectedButton == "start") {
+                MMSelectedButton = "credits"
+                scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
+            } else {
+                MMSelectedButton = "start"
+                scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+            }
+        } else if (MMType == "characterSelect") {
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, MMSelectedCharacterCoordinates) + 1, 2), MMSelectedCharacterCoordinates)
+            if (player2 == mp.playerSelector(mp.PlayerNumber.One)) {
+                tiles.placeOnTile(cursorP1, tiles.getTileLocation(1 + getMat4x4(0, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(0, 1, MMSelectedCharacterCoordinates)))
+            } else {
+                tiles.placeOnTile(cursorP2, tiles.getTileLocation(5 + getMat4x4(1, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(1, 1, MMSelectedCharacterCoordinates)))
+            }
         }
     }
 })
 function openMenu () {
     MMBTNPressed = false
+    MMType = "mainMenu"
     MMSelectedButton = "start"
     color.startFade(color.GrayScale, color.originalPalette)
     scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
     music.play(music.melodyPlayable(music.beamUp), music.PlaybackMode.InBackground)
     pauseUntil(() => MMBTNPressed)
     if (MMSelectedButton == "start") {
-        scene.cameraShake(4, 500)
-        scene.setBackgroundImage(assets.image`EmptyMenuBG`)
-        gameStarted = false
-        Alan = sprites.create(assets.image`Alan`, SpriteKind.Player)
-        Israel = sprites.create(assets.image`myImage`, SpriteKind.Player)
-        PlayableCharacters = [Alan, Israel]
-        initFightLevel(Alan, Israel)
+        openCharacterSelect()
     } else {
         openCredits()
     }
 }
-mp.onButtonEvent(mp.MultiplayerButton.Up, ControllerButtonEvent.Pressed, function (player2) {
+mp.onButtonEvent(mp.MultiplayerButton.Left, ControllerButtonEvent.Pressed, function (player2) {
     if (gameStarted) {
     	
     } else {
-        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        if (MMSelectedButton == "start") {
-            MMSelectedButton = "credits"
-            scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
-        } else {
-            MMSelectedButton = "start"
-            scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+        if (MMType == "characterSelect") {
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 0, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 0, MMSelectedCharacterCoordinates) - 1, 2), MMSelectedCharacterCoordinates)
+            if (player2 == mp.playerSelector(mp.PlayerNumber.One)) {
+                tiles.placeOnTile(cursorP1, tiles.getTileLocation(1 + getMat4x4(0, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(0, 1, MMSelectedCharacterCoordinates)))
+            } else {
+                tiles.placeOnTile(cursorP2, tiles.getTileLocation(5 + getMat4x4(1, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(1, 1, MMSelectedCharacterCoordinates)))
+            }
         }
     }
 })
+function getMat4x4 (i: number, j: number, matrix: number[][]) {
+    return matrix[i][j]
+}
+mp.onButtonEvent(mp.MultiplayerButton.Up, ControllerButtonEvent.Pressed, function (player2) {
+    if (gameStarted) {
+    	
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        if (MMType == "mainMenu") {
+            if (MMSelectedButton == "start") {
+                MMSelectedButton = "credits"
+                scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
+            } else {
+                MMSelectedButton = "start"
+                scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+            }
+        } else if (MMType == "characterSelect") {
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, MMSelectedCharacterCoordinates) - 1, 2), MMSelectedCharacterCoordinates)
+            if (player2 == mp.playerSelector(mp.PlayerNumber.One)) {
+                tiles.placeOnTile(cursorP1, tiles.getTileLocation(1 + getMat4x4(0, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(0, 1, MMSelectedCharacterCoordinates)))
+            } else {
+                tiles.placeOnTile(cursorP2, tiles.getTileLocation(5 + getMat4x4(1, 0, MMSelectedCharacterCoordinates), 4 + getMat4x4(1, 1, MMSelectedCharacterCoordinates)))
+            }
+        }
+    }
+})
+let MMSelectedButton = ""
 let PlayableCharacters: Sprite[] = []
 let Israel: Sprite = null
 let Alan: Sprite = null
-let MMSelectedButton = ""
+let list: number[] = []
 let middleOfPlayers: Sprite = null
+let MMBTNPressedP2 = false
 let GRAVITY = 0
 let player2Jumps = 0
 let player1Jumps = 0
+let cursorP2: Sprite = null
+let cursorP1: Sprite = null
+let MMSelectedCharacterCoordinates: number[][] = []
+let MMType = ""
 let gameStarted = false
 let MMBTNPressed = false
 openMenu()

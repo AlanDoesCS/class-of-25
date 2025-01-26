@@ -1,103 +1,213 @@
-@namespace
-class MultiplayerState:
-    numJumps = MultiplayerState.create()
-
-def on_button_multiplayer_a_pressed(player2):
-    if gameStarted:
-        mp.set_player_state(player2, MultiplayerState.numJumps, 3)
-        if mp.get_player_state(player2, MultiplayerState.numJumps) == 0:
-            game.game_over(True)
-        if mp.get_player_state(player2, MultiplayerState.numJumps) > 0:
-            mp.get_player_sprite(player2).vy = GRAVITY * -0.6
-
-mp.on_button_event(mp.MultiplayerButton.A,
-    ControllerButtonEvent.PRESSED,
-    on_button_multiplayer_a_pressed)
-
-def initPlayer(playerNumber: number, playerSprite: Sprite):
-    mp.set_player_sprite(mp.get_player_by_number(playerNumber), playerSprite)
-    mp.set_player_state(mp.get_player_by_number(playerNumber),
-        MultiplayerState.score,
-        0)
-    mp.move_with_buttons(mp.get_player_by_number(playerNumber), 100, 0)
-    mp.set_player_state(mp.get_player_by_number(playerNumber),
-        MultiplayerState.numJumps,
-        3)
-    characterAnimations.loop_frames(playerSprite,
-        assets.animation("""
-            AlanIdle
-        """),
-        1000,
-        characterAnimations.rule(Predicate.NOT_MOVING,
-            Predicate.MOVING_RIGHT,
-            Predicate.MOVING_RIGHT))
-    playerSprite.set_scale(1, ScaleAnchor.TOP_LEFT)
+namespace SpriteKind {
+    export const Cursor = SpriteKind.create()
+}
+namespace MultiplayerState {
+    export const numJumps = MultiplayerState.create()
+}
+function clamp (min: number, value: number, max: number) {
+    return Math.min(max, Math.max(value, min))
+}
+function openCredits () {
+    MMBTNPressed = false
+    scene.setBackgroundImage(assets.image`CreditsBG`)
+    pauseUntil(() => MMBTNPressed)
+    openMenu()
+}
+mp.onButtonEvent(mp.MultiplayerButton.A, ControllerButtonEvent.Pressed, function (player2) {
+    if (gameStarted) {
+        if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1 && 0 < player1Jumps) {
+            mp.getPlayerSprite(player2).vy = GRAVITY * -0.5
+            player1Jumps += -1
+        } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 2 && 0 < player2Jumps) {
+            mp.getPlayerSprite(player2).vy = GRAVITY * -0.5
+            player2Jumps += -1
+        }
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
+        MMBTNPressed = true
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 2) {
+        MMBTNPressedP2 = true
+    }
+})
+function initFightLevel (player1Sprite: Sprite, player2Sprite: Sprite) {
+    middleOfPlayers = sprites.create(assets.image`Empty`, SpriteKind.Player)
+    scene.cameraFollowSprite(middleOfPlayers)
+    GRAVITY = 350
+    info.player1.setScore(0)
+    info.player2.setScore(0)
+    scene.setBackgroundColor(3)
+    tiles.setCurrentTilemap(tilemap`Classroom Chaos`)
+    initPlayer(1, player1Sprite)
+    initPlayer(2, player2Sprite)
+    player1Jumps = 3
+    player2Jumps = 3
+    gameStarted = true
+}
+function getPlayerX (playerNum: number) {
+    return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum)).x
+}
+function initPlayer (playerNumber: number, playerSprite: Sprite) {
+    mp.setPlayerSprite(mp.getPlayerByNumber(playerNumber), playerSprite)
+    mp.setPlayerState(mp.getPlayerByNumber(playerNumber), MultiplayerState.score, 0)
+    mp.moveWithButtons(mp.getPlayerByNumber(playerNumber), 100, 0)
+    mp.setPlayerState(mp.getPlayerByNumber(playerNumber), MultiplayerState.numJumps, 3)
+    characterAnimations.loopFrames(
+    playerSprite,
+    assets.animation`AlanIdle`,
+    1000,
+    characterAnimations.rule(Predicate.NotMoving, Predicate.MovingRight, Predicate.MovingRight)
+    )
+    playerSprite.setScale(1, ScaleAnchor.TopLeft)
     playerSprite.ay = GRAVITY
-    tiles.place_on_tile(playerSprite,
-        tiles.get_tile_location(13 + 5 * (playerNumber - 1), 5))
-
-def getPlayerX(playerNum: number):
-    return mp.get_player_sprite(mp.get_player_by_number(playerNum)).x
-def getPlayerY(playerNum4: number):
-    return mp.get_player_sprite(mp.get_player_by_number(playerNum4)).y
-def getPlayerVX(playerNum2: number):
-    return mp.get_player_sprite(mp.get_player_by_number(playerNum2)).vx
-def getPlayerVY(playerNum3: number):
-    return mp.get_player_sprite(mp.get_player_by_number(playerNum3)).vy
-
-gameStarted = False
-middleOfPlayers = sprites.create(img("""
+    tiles.placeOnTile(playerSprite, tiles.getTileLocation(13 + 5 * (playerNumber - 1), 5))
+}
+function getPlayerVX (playerNum2: number) {
+    return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum2)).vx
+}
+function getPlayerVY (playerNum3: number) {
+    return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum3)).vy
+}
+function setMat4x4 (i: number, j: number, value: number, matrix: number[][]) {
+    list = matrix[i]
+    list[j] = value
+    matrix[i] = list
+    return matrix
+}
+function openCharacterSelect () {
+    scene.setBackgroundImage(assets.image`CharacterSelectMenuBG`)
+    tiles.setCurrentTilemap(tilemap`SelectedPlayers`)
+    cursorP1 = sprites.create(img`
         . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . .
-    """),
-    SpriteKind.player)
-scene.camera_follow_sprite(middleOfPlayers)
-GRAVITY = 350
-Alan = sprites.create(assets.image("""
-    Alan
-"""), SpriteKind.player)
-Israel = sprites.create(assets.image("""
-    myImage
-"""), SpriteKind.player)
-PlayableCharacters = [Alan, Israel]
-for value in PlayableCharacters:
-    value.set_scale(0.00001, ScaleAnchor.TOP_LEFT)
-info.player1.set_score(0)
-info.player2.set_score(0)
-scene.set_background_color(3)
-tiles.set_current_tilemap(tilemap("""
-    Classroom Chaos
-"""))
-initPlayer(1, Alan)
-initPlayer(2, Israel)
-gameStarted = True
-
-def on_on_update():
-    if mp.get_player_sprite(mp.player_selector(mp.PlayerNumber.ONE)).vy == 0:
-        pass
-game.on_update(on_on_update)
-
-def on_forever():
-    if gameStarted:
-        middleOfPlayers.set_position((mp.get_player_sprite(mp.player_selector(mp.PlayerNumber.ONE)).x + mp.get_player_sprite(mp.player_selector(mp.PlayerNumber.TWO)).x) / 2,
-            (mp.get_player_sprite(mp.player_selector(mp.PlayerNumber.ONE)).y + mp.get_player_sprite(mp.player_selector(mp.PlayerNumber.TWO)).y) / 2)
-        for index in range(2):
-            if getPlayerVY(index + 1) == 0:
-                mp.set_player_state(mp.get_player_by_number(index + 1),
-                    MultiplayerState.numJumps,
-                    3)
-forever(on_forever)
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Cursor)
+    cursorP2 = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Cursor)
+    MMBTNPressed = false
+    MMBTNPressedP2 = false
+    // Player 1
+    // Player 2
+    MMSelectedCharacterCoordinates = [[0, 0], [0, 0]]
+    MMType = "characterSelect"
+    pauseUntil(() => MMBTNPressed && MMBTNPressedP2)
+    scene.cameraShake(4, 500)
+    scene.setBackgroundImage(assets.image`EmptyMenuBG`)
+    gameStarted = false
+    Alan = sprites.create(assets.image`Alan`, SpriteKind.Player)
+    Israel = sprites.create(assets.image`Israel`, SpriteKind.Player)
+    PlayableCharacters = [Alan, Israel]
+    initFightLevel(Alan, Israel)
+}
+function getPlayerY (playerNum4: number) {
+    return mp.getPlayerSprite(mp.getPlayerByNumber(playerNum4)).y
+}
+mp.onButtonEvent(mp.MultiplayerButton.Down, ControllerButtonEvent.Pressed, function (player2) {
+    if (gameStarted) {
+    	
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        if (MMType == "mainMenu") {
+            if (MMSelectedButton == "start") {
+                MMSelectedButton = "credits"
+                scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
+            } else {
+                MMSelectedButton = "start"
+                scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+            }
+        } else if (MMType == "characterSelect") {
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, MMSelectedCharacterCoordinates) + 1, 3), MMSelectedCharacterCoordinates)
+        }
+    }
+})
+function openMenu () {
+    MMBTNPressed = false
+    MMType = "mainMenu"
+    MMSelectedButton = "start"
+    color.startFade(color.GrayScale, color.originalPalette)
+    scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+    music.play(music.melodyPlayable(music.beamUp), music.PlaybackMode.InBackground)
+    pauseUntil(() => MMBTNPressed)
+    if (MMSelectedButton == "start") {
+        openCharacterSelect()
+    } else {
+        openCredits()
+    }
+}
+function getMat4x4 (i: number, j: number, matrix: number[][]) {
+    return matrix[i][j]
+}
+mp.onButtonEvent(mp.MultiplayerButton.Up, ControllerButtonEvent.Pressed, function (player2) {
+    if (gameStarted) {
+    	
+    } else if (mp.getPlayerProperty(player2, mp.PlayerProperty.Number) == 1) {
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        if (MMType == "mainMenu") {
+            if (MMSelectedButton == "start") {
+                MMSelectedButton = "credits"
+                scene.setBackgroundImage(assets.image`MainMenuBG_CreditsSelected`)
+            } else {
+                MMSelectedButton = "start"
+                scene.setBackgroundImage(assets.image`MainMenuBG_StartSelected`)
+            }
+        } else if (MMType == "characterSelect") {
+            MMSelectedCharacterCoordinates = setMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, clamp(0, getMat4x4(mp.getPlayerProperty(player2, mp.PlayerProperty.Number) - 1, 1, MMSelectedCharacterCoordinates) - 1, 3), MMSelectedCharacterCoordinates)
+        }
+    }
+})
+let MMSelectedButton = ""
+let PlayableCharacters: Sprite[] = []
+let Israel: Sprite = null
+let Alan: Sprite = null
+let MMType = ""
+let MMSelectedCharacterCoordinates: number[][] = []
+let cursorP2: Sprite = null
+let cursorP1: Sprite = null
+let list: number[] = []
+let middleOfPlayers: Sprite = null
+let MMBTNPressedP2 = false
+let GRAVITY = 0
+let player2Jumps = 0
+let player1Jumps = 0
+let gameStarted = false
+let MMBTNPressed = false
+openMenu()
+forever(function () {
+    if (gameStarted) {
+        middleOfPlayers.setPosition((mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)).x + mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)).x) / 2, (mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)).y + mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)).y) / 2)
+        for (let index = 0; index <= 1; index++) {
+            if (getPlayerVY(index + 1) == 0 && index == 0) {
+                player1Jumps = 3
+            } else if (getPlayerVY(index + 1) == 0 && index == 0) {
+                player2Jumps = 3
+            }
+        }
+    }
+})
